@@ -1,0 +1,10 @@
+pthread.o: pthread.cc \
+ /home/uga/abigail.oliver/kos/src/ulib/../testoptions.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/syscalls.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/kostypes.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/pthread.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/syscalls.h
+libKOS.o: libKOS.cc \
+ /home/uga/abigail.oliver/kos/src/ulib/../testoptions.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/syscalls.h \
+ /home/uga/abigail.oliver/kos/src/ulib/../include/kostypes.h

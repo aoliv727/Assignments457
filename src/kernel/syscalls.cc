@@ -36,10 +36,23 @@ extern "C" void __assert_func( const char* const file, size_t line,
 
 extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
+  if(pid != 0)
+      return EPERM;
+  else
+    return Runtime::getCurrThread()->getAffinityMask();
 }
 
 extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
+  if(pid == 0)
+    {
+      if(cpusetsize == sizeof(cpu_set_t))
+	return Runtime::getCurrThread()->setAffinityMask(*mask);
+      else
+	return EINVAL;
+    }
+  else
+    return EPERM;
 }
 
 
