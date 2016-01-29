@@ -26,6 +26,15 @@ extern "C" void _KOS_sighandler(mword s) {
   signum = s;
 }
 
+extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask) {
+  return syscallStub(SyscallNum::sched_getaffinity, pid, cpusetsize, mask);
+}
+
+extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask) {
+  return syscallStub(SyscallNum::sched_getaffinity, pid, cpusetsize, mask);
+}
+
+
 extern "C" void _initialize_KOS_standard_library() {
   syscallStub(SyscallNum::_init_sig_handler, (mword)_KOS_sigwrapper);
 }

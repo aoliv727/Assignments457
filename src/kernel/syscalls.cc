@@ -34,6 +34,15 @@ extern "C" void __assert_func( const char* const file, size_t line,
   Reboot();
 }
 
+extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
+{
+}
+
+extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
+{
+}
+
+
 extern "C" void abort() {
   KABORT0();
   unreachable();
@@ -239,6 +248,8 @@ void* __dso_handle = nullptr;
 typedef ssize_t (*syscall_t)(mword a1, mword a2, mword a3, mword a4, mword a5);
 static const syscall_t syscalls[] = {
   syscall_t(_exit),
+  syscall_t(sched_getaffinity),
+  syscall_t(sched_setaffinity),
   syscall_t(open),
   syscall_t(close),
   syscall_t(read),
