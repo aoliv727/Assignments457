@@ -127,6 +127,59 @@ void Scheduler::preempt() {               // IRQs disabled, lock count inflated
 	  /* use Martin's code when no affinity is set via bit mask */
 	  target =  Runtime::getCurrThread()->getAffinity();
    }  else {
+    Scheduler *sched[4];
+    Scheduler *currLowCount = nullptr;
+
+
+    for(int i = 0; i < 4; i++)
+      {
+	sched[i] = nullptr;
+      }
+
+
+    if( affinityMask == 0 ) {
+      /* use Martin's code when no affinity is set via bit mask */
+      target =  Runtime::getCurrThread()->getAffinity();
+    }  else {
+
+      affinityMask &= 0x15;
+      mword first3Digits = affinityMask / 10;
+      mword firstCore = affinityMask % 10;
+      mword secondCore = first3Digits % 10;
+      mword first2Digits = first3Digits / 10;
+      mword thirdCore = first2Digits % 10;
+      mword fourthCore = first2digits / 10;
+      
+      if (firstCore == 1)
+        sched[0] = Machine::getScheduler(1);
+      if (secondCore == 1)
+	 sched[1] = Machine::getScheduler(2);
+      if (thirdCore == 1)
+	 sched[2] = Machine::getScheduler(3);
+      if (fourthCore == 1)
+	 sched[3] = Machine::getScheduler(4);
+
+      for(int i = 0; i < 4; i++)
+	{
+	  if(sched[i] != nullptr)
+	    {
+	      if(currLowCount == nullptr)
+		{
+		  currLowCount = sched[i];
+		}
+	      else
+		{
+		  if(currLowCount->readyCount > sched[i]->readyCount)
+		    {
+		      currLowCount = sched[i];
+		    }
+		}
+	    }
+
+	}
+
+      target = currLowCount;
+      Scheduler::yield();
 	  /* CPSC457l: Add code here to scan the affinity mask
       * and select the processor with the smallest ready count.
       * Set the scheduler of the selected processor as target

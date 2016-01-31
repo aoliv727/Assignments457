@@ -38,6 +38,9 @@ class Machine : public NoObject {
   static void bootCleanup();
 
 public:
+
+  static Scheduler* getScheduler(mword core);
+  
   static void initAP(mword idx)                        __section(".boot.text");
   static void initBSP(mword mag, vaddr mb, mword idx)  __section(".boot.text");
   static void bootMain();

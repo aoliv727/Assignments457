@@ -89,6 +89,12 @@ class Processor {
   }
 
 public:
+
+  static Scheduler* processorGetScheduler() {
+    return Processor::getScheduler();
+  }
+
+  
   Processor() : lockCount(1), currThread(nullptr), currAS(nullptr),
     userPI(nullptr), kernPI(nullptr), scheduler(nullptr),
     frameManager(nullptr), index(0), apicID(0), systemID(0) {}
