@@ -91,7 +91,9 @@ class Processor {
 public:
 
   static Scheduler* processorGetScheduler() {
-    return Processor::getScheduler();
+    Scheduler* x;
+    asm volatile("movq %%gs:%c1, %0" : "=r"(x) : "i"(offsetof(Processor, scheduler)));
+    return x;
   }
 
   
