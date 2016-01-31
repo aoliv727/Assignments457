@@ -38,23 +38,28 @@ extern "C" void __assert_func( const char* const file, size_t line,
 
 extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
-  if(pid != 0)
-      return EPERM;
+  if(pid == 0)
+       return Runtime::getCurrThread()->getAffinityMask();
   else
-    return Runtime::getCurrThread()->getAffinityMask();
+    // EPERM ERROR
+    return -1;
 }
 
 extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
   if(pid == 0)
     {
-      if(cpusetsize == sizeof(cpu_set_t))
+      if(cpusetsize > sizeof(cpu_set_t) || *mask >= 0x10)
+	// EINVAL ERROR
+	return -1;
+      else{
         Runtime::getCurrThread()->setAffinityMask(*mask);
-      else
-	return EINVAL;
+	LocalProcessor::getScheduler()->yield();
+      }
     }
   
-    return EPERM;
+    // EPERM ERROR
+    return -1;
 }
 
 
