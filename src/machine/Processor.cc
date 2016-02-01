@@ -26,6 +26,11 @@ void Processor::install() {
   MSR::write(MSR::GS_BASE, mword(this)); // store 'this' in gs
   MSR::write(MSR::KERNEL_GS_BASE, 0);    // later: store user value in shadow gs
 }
+/*
+Scheduler* Processor::processorGetScheduler(){
+  return scheduler;
+}
+*/
 
 void Processor::check(bool output) {
   DBG::Level dl = output ? DBG::Basic : DBG::MaxLevel;
@@ -121,4 +126,8 @@ void LocalProcessor::initInterrupts(bool irqs) {
   MappedAPIC()->setTaskPriority(0x00); // accept all interrupts
   MappedAPIC()->enable(0xff);          // enable APIC, set spurious IRQ to 0xff
   unlock(1);
+
+
+  
+
 }

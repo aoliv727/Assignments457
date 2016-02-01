@@ -153,15 +153,14 @@ void Scheduler::preempt() {               // IRQs disabled, lock count inflated
 	 sched[3] = Machine::getScheduler(4);
     */
 
-      if (affinityMask &= 0x1 == 0x1)
-         sched[0] = Machine::getScheduler(0);
-      if (affinityMask &= 0x2 == 0x2)
-	 sched[1] = Machine::getScheduler(1);
-      if (affinityMask &= 0x4 == 0x4)
-	 sched[2] = Machine::getScheduler(2);
-      if (affinityMask &= 0x8 == 0x8)
-	 sched[3] = Machine::getScheduler(3);
-    
+    if (affinityMask &= 0x1 == 0x1)
+	sched[0] = Machine::getScheduler(0);
+    if (affinityMask &= 0x2 == 0x2)
+	sched[1] = Machine::getScheduler(1);
+    if (affinityMask &= 0x4 == 0x4)
+	sched[2] = Machine::getScheduler(2);
+    if (affinityMask &= 0x8 == 0x8)
+	sched[3] = Machine::getScheduler(3);
     
       for(int i = 0; i < 4; i++)
 	{
@@ -182,7 +181,6 @@ void Scheduler::preempt() {               // IRQs disabled, lock count inflated
 
 	}
       target = currLowCount;
-      Scheduler::yield();
 
       /* CPSC457l: Add code here to scan the affinity mask
       * and select the processor with the smallest ready count.

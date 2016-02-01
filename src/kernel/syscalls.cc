@@ -39,7 +39,7 @@ extern "C" void __assert_func( const char* const file, size_t line,
 extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
   if(pid == 0)
-       return Runtime::getCurrThread()->getAffinityMask();
+    return 0;
   else
     // EPERM ERROR
     return -1;
@@ -49,12 +49,14 @@ extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask)
 {
   if(pid == 0)
     {
-      if(cpusetsize > sizeof(cpu_set_t) || *mask >= 0x10)
+      
+      if(cpusetsize > sizeof(cpu_set_t) || *mask  > mword(get_core_count()))
 	// EINVAL ERROR
 	return -1;
       else{
-        Runtime::getCurrThread()->setAffinityMask(*mask);
-	LocalProcessor::getScheduler()->yield();
+       Runtime::getCurrThread()->setAffinityMask(*mask);
+       LocalProcessor::getScheduler()->yield();
+       return 0;
       }
     }
   

@@ -118,7 +118,8 @@ static Semaphore asyncIrqSem;
 
 Scheduler* Machine::getScheduler(mword core)
 {
-  return processorTable[core].processorGetScheduler();
+  KASSERT1(core < processorCount, core);
+  return processorTable[core].scheduler;
 }
 
 

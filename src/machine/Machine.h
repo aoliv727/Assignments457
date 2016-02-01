@@ -38,8 +38,6 @@ class Machine : public NoObject {
   static void bootCleanup();
 
 public:
-
-  static Scheduler* getScheduler(mword core);
   
   static void initAP(mword idx)                        __section(".boot.text");
   static void initBSP(mword mag, vaddr mb, mword idx)  __section(".boot.text");
@@ -54,7 +52,9 @@ public:
   static void registerIrqSync(mword irq, mword vec);
   static void registerIrqAsync(mword irq, funcvoid1_t handler, ptr_t ctx);
   static void deregisterIrqAsync(mword irq, funcvoid1_t handler);
+  static Scheduler* getScheduler(mword core);
 };
+
 
 void Breakpoint2(vaddr ia = 0) __ninline;
 

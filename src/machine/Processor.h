@@ -89,13 +89,14 @@ class Processor {
   }
 
 public:
-
+  
+  /*  
   static Scheduler* processorGetScheduler() {
     Scheduler* x;
     asm volatile("movq %%gs:%c1, %0" : "=r"(x) : "i"(offsetof(Processor, scheduler)));
     return x;
   }
-
+  */
   
   Processor() : lockCount(1), currThread(nullptr), currAS(nullptr),
     userPI(nullptr), kernPI(nullptr), scheduler(nullptr),
