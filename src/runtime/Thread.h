@@ -24,7 +24,9 @@ class Scheduler;
 class UnblockInfo;
 
 class Thread : public EmbeddedList<Thread>::Link {
+
   friend class Scheduler;   // Scheduler accesses many internals
+  friend class ThreadNode;	// ThreadNode needs access to vRuntime.
   friend void Runtime::postResume(bool, Thread&, AddressSpace&);
 
   vaddr stackPointer;       // holds stack pointer while thread inactive
@@ -32,10 +34,8 @@ class Thread : public EmbeddedList<Thread>::Link {
   size_t stackSize;         // size of allocated memory
 
   mword priority;           // scheduling priority
+  mword vRuntime;			// virtual runtime, needed to sort the tree
   bool affinity;            // stick with scheduler
-  cpu_set_t affinityMask;	 	 // stick with multiple schedulers
-  // affinity mask of 0 means that the thread can be scheduled on any processor  
-
   Scheduler* nextScheduler; // resume on same core (for now)
 
   Runtime::MachContext ctx;
@@ -50,7 +50,7 @@ protected:
 
   Thread(vaddr sb, size_t ss) :
     stackPointer(vaddr(this)), stackBottom(sb), stackSize(ss),
-    priority(defPriority), affinity(false), affinityMask(0), nextScheduler(nullptr),
+    priority(defPriority), affinity(false), nextScheduler(nullptr),
     state(Running), unblockInfo(nullptr) {}
 
   // called directly when creating idle thread(s)
@@ -84,10 +84,6 @@ public:
   }
 
   Thread* setPriority(mword p)      { priority = p; return this; }
-
-  void   setAffinityMask( cpu_set_t mask ) { affinityMask = mask; }
-  cpu_set_t  getAffinityMask() { return affinityMask; }
-
   Thread* setAffinity(Scheduler* s) { affinity = (nextScheduler = s); return this; }
   Scheduler* getAffinity() const    { return affinity ? nextScheduler : nullptr; }
 

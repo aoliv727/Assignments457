@@ -19,22 +19,26 @@
 
 #include "generic/EmbeddedContainers.h"
 #include "runtime/Runtime.h"
+#include "generic/tree.h"
 
 class Thread;
+class ThreadNode;
 
 class Scheduler {
   friend void Runtime::idleLoop(Scheduler*);
   bufptr_t idleStack[minimumStack];
 
-  // very simple N-class prio scheduling
   BasicLock readyLock;
+  BasicLock printLock;
+  
   volatile mword readyCount; 
-  EmbeddedList<Thread> readyQueue[maxPriority];
+  Tree<ThreadNode> *readyTree;
+  
   volatile mword preemption;
   volatile mword resumption;
 
   Scheduler* partner;
-  
+
   template<typename... Args>
   inline void switchThread(Scheduler* target, Args&... a);
 
@@ -45,13 +49,14 @@ class Scheduler {
 
 public:
   Scheduler();
+  
+  bool switchTest(Thread* t);
   void setPartner(Scheduler& s) { partner = &s; }
   static void resume(Thread& t);
   void preempt();
   void suspend(BasicLock& lk);
   void suspend(BasicLock& lk1, BasicLock& lk2);
   void terminate() __noreturn;
-  void yield();
 };
 
 #endif /* _Scheduler_h_ */
