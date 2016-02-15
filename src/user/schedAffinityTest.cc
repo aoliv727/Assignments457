@@ -71,7 +71,7 @@ int main() {
       //cout << "sched_setaffinity successful" << endl; 
    	whereAmI();
    }
-   
+      
    cout << endl << "SCHED_SETAFFINITY TEST 3" << endl;
    err = 5;
    affinityMask = MASK1;
