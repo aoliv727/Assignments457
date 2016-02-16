@@ -23,6 +23,7 @@
 #include "devices/Keyboard.h"
 
 #include "main/UserMain.h"
+#include "stdlib.h"
 
 AddressSpace kernelSpace(true); // AddressSpace.h
 volatile mword Clock::tick;     // Clock.h
@@ -52,6 +53,34 @@ void kosMain() {
     }
     KOUT::outl();
   }
+  ///////////////////////////////////////////////////////////////////
+  char param1[5];
+  char param2[5];
+  bool nextparam = false;
+  auto iter2 = kernelFS.find("schedparam");
+  if (iter2 == kernelFS.end()) {
+    KOUT::outl("schedparam information not found");
+  } else {
+    FileAccess f(iter2->second);
+    for (int i = 0;;i++) {
+      char c;
+      if (f.read(&c, 1) == 0) break;
+      if(!nextparam){
+	if (c != ','){
+	  param1[i] = c;
+	}else{
+	  nextparam = true;
+	  i = 0;
+	}
+      }else{
+	param2[i] = c;
+      }      
+    }   
+    Machine::setSchedMinGranularity(atoi(param1));
+    Machine::setDefaultEpochLength(atoi(param2));
+    KOUT::outl();
+  }
+  ////////////////////////////////////////////////////////////////////
 #if TESTING_TIMER_TEST
   StdErr.print(" timer test, 3 secs...");
   for (int i = 0; i < 3; i++) {
@@ -69,7 +98,7 @@ void kosMain() {
 #if TESTING_PING_LOOP
   for (;;) {
     Timeout::sleep(Clock::now() + 1000);
-    KOUT::outl("...ping...");
+    //    KOUT::outl("...ping...");
   }
 #endif
 }

@@ -456,6 +456,13 @@ void Machine::rrPreemptIPI(mword tick) {
   sendIPI(processorTable[tick % processorCount].apicID, APIC::PreemptIPI);
 }
 
+void Machine::setSchedMinGranularity(mword schedMinGranularity) {
+  Scheduler::setSchedMinGranularity(schedMinGranularity);
+}
+
+void Machine::setDefaultEpochLength(mword defaultEpochLength) {
+  Scheduler::setDefaultEpochLength(defaultEpochLength);
+}
 /*********************** IRQ / Exception Handling Code ***********************/
 
 void Machine::asyncIrqLoop() {
