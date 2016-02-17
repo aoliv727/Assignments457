@@ -59,8 +59,8 @@ public:
   void suspend(BasicLock& lk);
   void suspend(BasicLock& lk1, BasicLock& lk2);
   void terminate() __noreturn;
-  void setSchedMinGranularity(mword schedMinGran){schedMinGranularity = schedMinGran;}
-  void setDefaultEpochLength(mword defaultEpochLen){defaultEpochLenth = defaultEpochLen;}
+  static void setSchedMinGranularity(mword schedMinGran){schedMinGranularity = schedMinGran;}
+  static void setDefaultEpochLength(mword defaultEpochLen){defaultEpochLenth = defaultEpochLen;}
 };
 
 #endif /* _Scheduler_h_ */

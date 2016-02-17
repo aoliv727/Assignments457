@@ -75,9 +75,11 @@ void kosMain() {
       }else{
 	param2[i] = c;
       }      
-    }   
-    Machine::setSchedMinGranularity(atoi(param1));
-    Machine::setDefaultEpochLength(atoi(param2));
+    }
+    mword minGran = atoi(param1);
+    mword defaultEpoch = atoi(param2);
+    Machine::setSchedMinGranularity(minGran);
+    Machine::setDefaultEpochLength(defaultEpoch);
     KOUT::outl();
   }
   ////////////////////////////////////////////////////////////////////

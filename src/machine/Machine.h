@@ -36,8 +36,12 @@ class Machine : public NoObject {
   static void initAP2()                                __section(".boot.text");
   static void initBSP2()                               __section(".boot.text");
   static void bootCleanup();
-
+  
 public:
+
+  static mword getFrequency();
+  static void setFrequency(mword freq);
+
   static void initAP(mword idx)                        __section(".boot.text");
   static void initBSP(mword mag, vaddr mb, mword idx)  __section(".boot.text");
   static void bootMain();

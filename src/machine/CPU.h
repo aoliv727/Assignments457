@@ -94,6 +94,13 @@ namespace MSR {
 };
 
 namespace CPU {
+  
+  /////////////////////////////////////////////////////////////WROTE STUFF
+  static mword freq = 0;
+  static mword getFreq() {return freq;}
+  static void setFreq(mword frequency){freq = frequency;}
+  //////////////////////////////////////////////////////////////
+  
   static inline void out8( uint16_t port, uint8_t val ) {
     asm volatile("outb %0, %1" :: "a"(val), "Nd"(port));
   }

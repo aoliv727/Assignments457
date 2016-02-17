@@ -131,6 +131,14 @@ void Machine::initAP2() {
   LocalProcessor::getScheduler()->terminate(); // idle thread takes over
 }
 
+mword Machine::getFrequency(){
+  return CPU::getFreq();
+}
+
+void Machine::setFrequency(mword freq){
+  CPU::setFreq(freq);
+}
+
 // init routine for BSP, on boot stack and identity paging
 void Machine::initBSP(mword magic, vaddr mbiAddr, mword idx) {
 
@@ -369,7 +377,17 @@ apDone:
     }
   }
   StdOut.print(kendl);
+  ///////////////////////////////////////////////////////////////////WROTE STUFF HERE
+  mword firstRead = CPU::readTSC();
+  // Timeout::sleep(5000);
+  Clock::wait(5000);
+  mword secondRead = CPU::readTSC();
+  mword result = (secondRead - firstRead)/5;
+  Machine::setFrequency(result);
+  ///////////////////////////////////////////////////////////////////
 
+
+  
   DBG::outl(DBG::Boot, "Building kernel filesystem...");
   // initialize kernel file system with boot modules
   Multiboot::readModules(kernelBase);
